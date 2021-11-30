@@ -8,13 +8,25 @@ function App() {
   const [loadingFetch, setLoadingFetch] = useState(false);
   const [loadingPost, setLoadingPost] = useState(false);
 
+  let latestId = 0;
+
   const fetchData = async () => {
+    latestId++;
+    const id = latestId;
     try {
-      setLoadingFetch(true);
+      // setLoadingFetch(true);
       const response = await fetch(
         "https://dev.api.globetrott.app/api/build-version/"
       );
-      setData(await response.json());
+      const getData = await response.json();
+      if (id !== latestId) {
+        console.log(" ABORTED!");
+        return;
+      } else {
+        latestId = 0;
+        console.log(" Finished!");
+        setData(getData);
+      }
     } catch (error) {
       setError("Fetch Went Wrong");
     }
